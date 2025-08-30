@@ -45,14 +45,16 @@ export default function TodaySchedule({
                   className="p-3 bg-gray-50 rounded-lg flex justify-between"
                 >
                   <div>
-                    <p className="font-medium">{client?.name || "—"}</p>
+                    <p className="font-medium">{client?.fullName || "—"}</p>
                     <p className="text-sm text-gray-500">
-                      {language === "ar" ? "القاعة" : "Hall"}:{" "}
-                      {b.hallName || "—"}
+                      {client?.email || "—"}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {client?.phoneNumber || "—"}
                     </p>
                   </div>
                   <span className="text-sm text-orange-600 font-medium">
-                    {format(new Date(b.weddingDate || b.date), "p", {
+                    {format(new Date(b.weddingDate || b.weddingDate), "p", {
                       locale: language === "ar" ? ar : enUS,
                     })}
                   </span>

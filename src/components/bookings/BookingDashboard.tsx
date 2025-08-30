@@ -4,7 +4,15 @@ import { useState } from "react";
 import BookingCalendar from "@/components/bookings/BookingCalendar";
 import BookingList from "@/components/bookings/BookingList";
 
-export default function BookingDashboard({ language = "en", user }) {
+interface BookingDashboardProps {
+  language?: string;
+  user: any; // Replace 'any' with a more specific type if available
+}
+
+export default function BookingDashboard({
+  language = "en",
+  user,
+}: BookingDashboardProps) {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 

@@ -41,7 +41,7 @@ export default function RecentPayments({
                     <p className="font-medium">
                       {language === "ar" ? "حجز #" : "Booking #"} {booking?.id}
                     </p>
-                    <p className="text-sm text-gray-500">{p.method || "—"}</p>
+                    <p className="text-sm text-gray-500">{p.type || "—"}</p>
                   </div>
                   <span className="text-sm text-green-600 font-bold">
                     {p.amount.toLocaleString()} دج

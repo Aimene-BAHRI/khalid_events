@@ -8,28 +8,20 @@ export async function GET(
   const { id } = await context.params;
 
   try {
-    const reservation = await prisma.booking.findUnique({
-      where: { id},
-      include: {
-        client: true,
-        user: {
-          select: {
-            username: true
-          }
-        }
-      }
+    const season = await prisma.pricingSeason.findUnique({
+      where: { id }
     })
 
-    if (!reservation) {
+    if (!season) {
       return NextResponse.json(
-        { error: 'Reservation not found' },
+        { error: 'Pricing season not found' },
         { status: 404 }
       )
     }
 
-    return NextResponse.json(reservation)
+    return NextResponse.json(season)
   } catch (error) {
-    console.error('Get reservation error:', error)
+    console.error('Get pricing season error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -45,22 +37,18 @@ export async function PUT(
 
   try {
     const body = await request.json()
-    const reservation = await prisma.booking.update({
+    const season = await prisma.pricingSeason.update({
       where: { id },
-      data: body,
-      include: {
-        client: true,
-        user: {
-          select: {
-            username: true
-          }
-        }
+      data: {
+        ...body,
+        startDate: new Date(body.startDate),
+        endDate: new Date(body.endDate)
       }
     })
 
-    return NextResponse.json(reservation)
+    return NextResponse.json(season)
   } catch (error) {
-    console.error('Update reservation error:', error)
+    console.error('Update pricing season error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -75,13 +63,13 @@ export async function DELETE(
   const { id } = await context.params;
 
   try {
-    await prisma.booking.delete({
+    await prisma.pricingSeason.delete({
       where: { id }
     })
 
-    return NextResponse.json({ message: 'Reservation deleted' })
+    return NextResponse.json({ message: 'Pricing season deleted' })
   } catch (error) {
-    console.error('Delete reservation error:', error)
+    console.error('Delete pricing season error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

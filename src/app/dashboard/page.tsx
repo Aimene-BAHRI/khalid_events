@@ -98,8 +98,8 @@ export default function Dashboard() {
           </h1>
           <p className="text-orange-600/70">
             {language === "ar"
-              ? "مرحباً بك في نظام إدارة قاعة الأحلام"
-              : "Welcome to Dream Venue Management System"}
+              ? "مرحباً بك في نظام إدارة قاعة الحفلات خالد إيفنتس"
+              : "Welcome to the Khaled Events Banquet Hall Management System"}
           </p>
         </div>
         <div className="hidden md:flex items-center gap-2 text-sm text-orange-600">

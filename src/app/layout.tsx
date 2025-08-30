@@ -193,7 +193,7 @@ export default function RootLayout({
                       </div>
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="sm"
                         onClick={handleLogout}
                         className="h-8 w-8 hover:bg-orange-100 hover:text-orange-700"
                       >

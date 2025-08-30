@@ -24,7 +24,7 @@ export async function GET() {
       clientPhone: b.client.phoneNumber,
       staff: b.user.username,
       payments: b.payments
-        .map((p) => `${p.amount} (${p.method}, ${p.type})`)
+        .map((p) => `${p.amount} (${p.type})`)
         .join("; "),
     }));
 

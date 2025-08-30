@@ -120,11 +120,11 @@ export default function ClientsPage() {
       case "DEPOSIT_PAID":
         return "secondary";
       case "RESERVED":
-        return "outline";
+        return "warning"; // ✅ changed from "outline"
       case "COMPLETED":
-        return "default";
+        return "success"; // ✅ maybe better than "default"?
       default:
-        return "outline";
+        return "default";
     }
   };
 

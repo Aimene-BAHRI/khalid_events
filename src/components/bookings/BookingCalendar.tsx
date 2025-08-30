@@ -8,6 +8,14 @@ import interactionPlugin from "@fullcalendar/interaction";
 import arLocale from "@fullcalendar/core/locales/ar";
 import enLocale from "@fullcalendar/core/locales/en-gb";
 
+type Booking = {
+  id: string;
+  title?: string;
+  client?: { fullName?: string };
+  weddingDate: string;
+  [key: string]: any;
+};
+
 export default function BookingCalendar({
   bookings,
   clients,
@@ -18,7 +26,7 @@ export default function BookingCalendar({
 }: any) {
   const calendarRef = useRef<any>(null);
 
-  const events = bookings.map((b) => ({
+  const events = bookings.map((b: Booking) => ({
     id: b.id,
     title: b.title || b.client?.fullName || "Wedding",
     start: b.weddingDate,

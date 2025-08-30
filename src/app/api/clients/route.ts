@@ -20,9 +20,9 @@ export async function POST(request: NextRequest) {
 
     const client = await prisma.client.create({
       data: {
-        name,
+        fullName : name,
         email,
-        phone
+        phoneNumber : phone
       }
     })
 

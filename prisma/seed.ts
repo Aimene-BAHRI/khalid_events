@@ -1,5 +1,5 @@
 // prisma/seed.ts
-import { PrismaClient, UserRole, Language, TimeSlot, BookingStatus, PaymentMethod, PaymentType } from '@prisma/client'
+import { PrismaClient, UserRole, Language, TimeSlot, BookingStatus, PaymentType, WeekDay } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -71,6 +71,8 @@ async function main() {
       status: BookingStatus.CONFIRMED,
       totalPrice: 800000, // 800,000 DZD
       paidAmount: 400000, // 400,000 DZD
+      guestCount: 150,
+      discount: 0,
       notes: 'Vegetarian menu options needed',
       userId: admin.id,
     },
@@ -85,19 +87,20 @@ async function main() {
       status: BookingStatus.DEPOSIT_PAID,
       totalPrice: 1200000, // 1,200,000 DZD
       paidAmount: 300000, // 300,000 DZD
+      guestCount: 200,
+      discount: 50000, // 50,000 DZD discount
       notes: 'Outdoor ceremony preferred',
       userId: staff.id,
     },
   })
   console.log('Sample bookings created')
 
-  // Create sample payments
+  // Create sample payments (always cash in DZD)
   const payment1 = await prisma.payment.create({
     data: {
       bookingId: booking1.id,
       staffId: admin.id,
       amount: 400000,
-      method: PaymentMethod.CASH,
       type: PaymentType.DEPOSIT,
       notes: 'Initial deposit payment',
     },
@@ -108,9 +111,8 @@ async function main() {
       bookingId: booking2.id,
       staffId: staff.id,
       amount: 300000,
-      method: PaymentMethod.BANK_TRANSFER,
       type: PaymentType.DEPOSIT,
-      notes: 'Bank transfer deposit',
+      notes: 'Deposit received in cash',
     },
   })
   console.log('Sample payments created')
@@ -123,6 +125,8 @@ async function main() {
       endDate: new Date('2024-08-31'),
       morningPrice: 400000,
       eveningPrice: 800000,
+      priority: 1,
+      daysOfWeek: [WeekDay.MONDAY, WeekDay.TUESDAY, WeekDay.WEDNESDAY, WeekDay.THURSDAY, WeekDay.FRIDAY, WeekDay.SATURDAY, WeekDay.SUNDAY],
       isActive: true,
     },
   })
@@ -134,6 +138,8 @@ async function main() {
       endDate: new Date('2025-02-28'),
       morningPrice: 300000,
       eveningPrice: 600000,
+      priority: 2,
+      daysOfWeek: [WeekDay.FRIDAY, WeekDay.SATURDAY], // weekend pricing
       isActive: true,
     },
   })
