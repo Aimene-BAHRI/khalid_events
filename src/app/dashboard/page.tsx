@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [payments, setPayments] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
-  const [user, setUser] = useState<any>(null);
+  const [setUser] = useState<any>(null);
   const [language, setLanguage] = useState("ar");
   const [loading, setLoading] = useState(true);
 
@@ -42,9 +42,15 @@ export default function Dashboard() {
         fetch("/api/clients"),
       ]);
 
-      if (bookingsRes.ok) setBookings(await bookingsRes.json());
-      if (paymentsRes.ok) setPayments(await paymentsRes.json());
-      if (clientsRes.ok) setClients(await clientsRes.json());
+      if (bookingsRes.ok) {
+        setBookings(await bookingsRes.json());
+      }
+      if (paymentsRes.ok) {
+        setPayments(await paymentsRes.json());
+      }
+      if (clientsRes.ok) {
+        setClients(await clientsRes.json());
+      }
     } catch (error) {
       console.error("Error loading dashboard:", error);
     }
@@ -167,7 +173,6 @@ export default function Dashboard() {
         <div>
           <RecentPayments
             payments={payments}
-            bookings={bookings}
             loading={loading}
             language={language}
           />

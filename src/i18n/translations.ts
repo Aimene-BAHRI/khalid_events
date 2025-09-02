@@ -200,7 +200,6 @@ export const translations = {
   partial: { ar: "جزئي", en: "Partial", fr: "Partiel" },
   full: { ar: "كامل", en: "Full", fr: "Complet" },
   paymentStatus: { ar: "حالة الدفع", en: "Payment Status", fr: "Statut du paiement" },
-  pending: { ar: "قيد الانتظار", en: "Pending", fr: "En attente" },
   completed: { ar: "مكتمل", en: "Completed", fr: "Terminé" },
   failed: { ar: "فاشل", en: "Failed", fr: "Échoué" },
   refunded: { ar: "تم الاسترجاع", en: "Refunded", fr: "Remboursé" },

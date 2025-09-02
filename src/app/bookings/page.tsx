@@ -9,7 +9,6 @@ import BookingForm from "@/components/bookings/BookingForm";
 import BookingList from "@/components/bookings/BookingList";
 import BookingCalendar from "@/components/bookings/BookingCalendar";
 import BookingFilters from "@/components/bookings/BookingFilters";
-import { useTranslation } from "@/hooks/use-translation";
 import { t } from "@/i18n/useTranslate";
 export default function Bookings() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -199,8 +198,10 @@ export default function Bookings() {
         <BookingFilters
           filters={filters}
           clients={clients}
-          onFiltersChange={setFilters}
-          language={language}
+          onFiltersChange={(newFilters) =>
+            setFilters((prev) => ({ ...prev, ...newFilters }))
+          }
+          language={language as "ar" | "en" | "fr"}
         />
       )}
 

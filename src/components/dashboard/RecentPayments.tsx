@@ -3,12 +3,7 @@ import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { t } from "@/i18n/useTranslate";
 
-export default function RecentPayments({
-  payments,
-  bookings,
-  loading,
-  language,
-}: any) {
+export default function RecentPayments({ payments, loading, language }: any) {
   const recent = payments.slice(0, 5);
 
   return (

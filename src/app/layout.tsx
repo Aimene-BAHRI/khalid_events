@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 import "./globals.css";
 import Image from "next/image";
 import { t } from "@/i18n/useTranslate";
-import { fr } from "date-fns/locale";
 const navigationItems = [
   { key: "navDashboard", url: "/dashboard", icon: LayoutDashboard },
   { key: "navBookings", url: "/bookings", icon: Calendar },
@@ -126,7 +125,7 @@ export default function RootLayout({
                         >
                           <item.icon className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                           <span className="font-medium">
-                            {t(item.key as keyof typeof translations, language)}
+                            {t(item.key as any, language as "ar" | "en" | "fr")}
                           </span>
                         </a>
                       ))}
