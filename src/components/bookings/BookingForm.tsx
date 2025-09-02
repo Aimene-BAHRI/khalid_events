@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { t } from "@/i18n/useTranslate";
 
 interface BookingFormProps {
   booking?: any;
@@ -41,7 +42,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
     <Card className="fixed inset-0 m-auto max-w-2xl h-fit max-h-[90vh] overflow-y-auto z-50">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>
-          {language === "ar" ? "نموذج الحجز" : "Booking Form"}
+          {t("bookingForm", language as "ar" | "en" | "fr")}
         </CardTitle>
         <Button variant="ghost" size="sm" onClick={onCancel}>
           <X className="w-4 h-4" />
@@ -51,7 +52,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {language === "ar" ? "العميل" : "Client"}
+              {t("client", language as "ar" | "en" | "fr")}
             </label>
             <select
               value={formData.clientId}
@@ -62,7 +63,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
               required
             >
               <option value="">
-                {language === "ar" ? "اختر عميل" : "Select client"}
+                {t("selectClient", language as "ar" | "en" | "fr")}
               </option>
               {clients.map((client) => (
                 <option key={client.id} value={client.id}>
@@ -75,7 +76,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {language === "ar" ? "التاريخ" : "Date"}
+                {t("date", language as "ar" | "en" | "fr")}
               </label>
               <input
                 type="date"
@@ -90,7 +91,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {language === "ar" ? "الفترة" : "Time Slot"}
+                {t("timeSlot", language as "ar" | "en" | "fr")}
               </label>
               <select
                 value={formData.timeSlot}
@@ -101,10 +102,10 @@ const BookingForm: React.FC<BookingFormProps> = ({
                 required
               >
                 <option value="MORNING">
-                  {language === "ar" ? "الصباح" : "Morning"}
+                  {t("morning", language as "ar" | "en" | "fr")}
                 </option>
                 <option value="EVENING">
-                  {language === "ar" ? "المساء" : "Evening"}
+                  {t("evening", language as "ar" | "en" | "fr")}
                 </option>
               </select>
             </div>
@@ -113,7 +114,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {language === "ar" ? "الحالة" : "Status"}
+                {t("status", language as "ar" | "en" | "fr")}
               </label>
               <select
                 value={formData.status}
@@ -132,29 +133,29 @@ const BookingForm: React.FC<BookingFormProps> = ({
                   CANCELLED
                 } */}
                 <option value="INQUIRY">
-                  {language === "ar" ? "استفسار" : "Inquiry"}
+                  {t("inquiry", language as "ar" | "en" | "fr")}
                 </option>
                 <option value="RESERVED">
-                  {language === "ar" ? "محجوز" : "Reserved"}
+                  {t("reserved", language as "ar" | "en" | "fr")}
                 </option>
                 <option value="DEPOSIT_PAID">
-                  {language === "ar" ? "الدفعة الأولى مدفوعة" : "Deposit Paid"}
+                  {t("depositPaid", language as "ar" | "en" | "fr")}
                 </option>
                 <option value="CONFIRMED">
-                  {language === "ar" ? "مؤكد" : "Confirmed"}
+                  {t("confirmed", language as "ar" | "en" | "fr")}
                 </option>
                 <option value="FULLY_PAID">
-                  {language === "ar" ? "مدفوع بالكامل" : "Fully Paid"}
+                  {t("fullyPaid", language as "ar" | "en" | "fr")}
                 </option>
                 <option value="CANCELLED">
-                  {language === "ar" ? "ملغى" : "Cancelled"}
+                  {t("cancelled", language as "ar" | "en" | "fr")}
                 </option>
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {language === "ar" ? "السعر الإجمالي" : "Total Price"}
+                {t("totalPrice", language as "ar" | "en" | "fr")}
               </label>
               <input
                 type="number"
@@ -170,7 +171,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {language === "ar" ? "المبلغ المدفوع" : "Paid Amount"}
+              {t("paidAmount", language as "ar" | "en" | "fr")}
             </label>
             <input
               type="number"
@@ -185,7 +186,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {language === "ar" ? "ملاحظات" : "Notes"}
+              {t("notes", language as "ar" | "en" | "fr")}
             </label>
             <textarea
               value={formData.notes}
@@ -199,10 +200,10 @@ const BookingForm: React.FC<BookingFormProps> = ({
 
           <div className="flex gap-3 justify-end pt-4">
             <Button type="button" variant="outline" onClick={onCancel}>
-              {language === "ar" ? "إلغاء" : "Cancel"}
+              {t("cancel", language as "ar" | "en" | "fr")}
             </Button>
             <Button type="submit" className="bg-orange-500 hover:bg-orange-600">
-              {language === "ar" ? "حفظ" : "Save"}
+              {t("save", language as "ar" | "en" | "fr")}
             </Button>
           </div>
         </form>

@@ -1,6 +1,7 @@
 // src/components/dashboard/RecentPayments.tsx
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { t } from "@/i18n/useTranslate";
 
 export default function RecentPayments({
   payments,
@@ -14,24 +15,22 @@ export default function RecentPayments({
     <Card className="rounded-2xl shadow-sm">
       <CardHeader>
         <CardTitle>
-          {language === "ar" ? "المدفوعات الأخيرة" : "Recent Payments"}
+          {t("recentPayments", language as "ar" | "en" | "fr")}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
           <p className="text-gray-500">
-            {language === "ar" ? "جاري التحميل..." : "Loading..."}
+            {t("loading", language as "ar" | "en" | "fr")}
           </p>
         ) : recent.length === 0 ? (
           <p className="text-gray-500">
-            {language === "ar" ? "لا توجد مدفوعات" : "No payments yet"}
+            {t("noPaymentsYet", language as "ar" | "en" | "fr")}
           </p>
         ) : (
           <ul className="space-y-3">
-            {recent.map((p: any) => {
-              const booking = bookings.find(
-                (b: any) => b.id === p.reservationId
-              );
+            {recent.map((p: any, index: number) => {
+              const booking = p.booking;
               return (
                 <li
                   key={p.id}
@@ -39,9 +38,14 @@ export default function RecentPayments({
                 >
                   <div>
                     <p className="font-medium">
-                      {language === "ar" ? "حجز #" : "Booking #"} {booking?.id}
+                      {t("booking", language as "ar" | "en" | "fr")}
+                      {index + 1 || "—"} <br />
+                      {booking?.title || booking?.client?.fullName}
                     </p>
-                    <p className="text-sm text-gray-500">{p.type || "—"}</p>
+                    <p className="text-sm text-gray-500">
+                      {p.type || "—"} •{" "}
+                      {new Date(p.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
                   <span className="text-sm text-green-600 font-bold">
                     {p.amount.toLocaleString()} دج

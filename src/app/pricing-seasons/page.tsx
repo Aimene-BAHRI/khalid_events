@@ -6,6 +6,7 @@ import { Calendar, Plus, Edit, Trash2, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { t } from "@/i18n/useTranslate";
 
 interface PricingSeason {
   id: string;
@@ -52,11 +53,7 @@ export default function PricingSeasons() {
 
   const handleDeleteSeason = async (id: string) => {
     if (
-      confirm(
-        language === "ar"
-          ? "هل أنت متأكد من حذف هذا الموسم؟"
-          : "Are you sure you want to delete this season?"
-      )
+      confirm(t("deleteSeasonConfirmation", language as "ar" | "en" | "fr"))
     ) {
       try {
         const response = await fetch(`/api/pricing-seasons/${id}`, {
@@ -108,12 +105,13 @@ export default function PricingSeasons() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gradient mb-2">
-            {language === "ar" ? "الأسعار الموسمية" : "Pricing Seasons"}
+            {t("pricingSeasons", language as "ar" | "en" | "fr")}
           </h1>
           <p className="text-orange-600/70">
-            {language === "ar"
-              ? "إدارة أسعار المواسم المختلفة"
-              : "Manage pricing for different seasons"}
+            {t(
+              "managePricingForDifferentSeasons",
+              language as "ar" | "en" | "fr"
+            )}
           </p>
         </div>
 
@@ -122,7 +120,7 @@ export default function PricingSeasons() {
           className="bg-orange-500 hover:bg-orange-600"
         >
           <Plus className="w-4 h-4 mr-2" />
-          {language === "ar" ? "موسم جديد" : "New Season"}
+          {t("newSeason", language as "ar" | "en" | "fr")}
         </Button>
       </div>
 
@@ -132,14 +130,14 @@ export default function PricingSeasons() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-green-800">
               <TrendingUp className="w-5 h-5" />
-              {language === "ar" ? "الموسم الحالي" : "Current Season"}
+              {t("currentSeason", language as "ar" | "en" | "fr")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <p className="text-sm text-green-600">
-                  {language === "ar" ? "اسم الموسم" : "Season Name"}
+                  {t("seasonName", language as "ar" | "en" | "fr")}
                 </p>
                 <p className="font-semibold text-green-800">
                   {currentSeason.name}
@@ -147,7 +145,7 @@ export default function PricingSeasons() {
               </div>
               <div>
                 <p className="text-sm text-green-600">
-                  {language === "ar" ? "الفترة" : "Period"}
+                  {t("period", language as "ar" | "en" | "fr")}
                 </p>
                 <p className="font-semibold text-green-800">
                   {new Date(currentSeason.startDate).toLocaleDateString()} -{" "}
@@ -156,13 +154,13 @@ export default function PricingSeasons() {
               </div>
               <div>
                 <p className="text-sm text-green-600">
-                  {language === "ar" ? "الأسعار" : "Prices"}
+                  {t("prices", language as "ar" | "en" | "fr")}
                 </p>
                 <p className="font-semibold text-green-800">
-                  {language === "ar" ? "صباح: " : "Morning: "}
+                  {t("morning", language as "ar" | "en" | "fr")}{" "}
                   {currentSeason.morningPrice.toLocaleString()} دج
                   <br />
-                  {language === "ar" ? "مساء: " : "Evening: "}
+                  {t("evening", language as "ar" | "en" | "fr")}
                   {currentSeason.eveningPrice.toLocaleString()} دج
                 </p>
               </div>
@@ -175,7 +173,7 @@ export default function PricingSeasons() {
       <Card>
         <CardHeader>
           <CardTitle>
-            {language === "ar" ? "قائمة المواسم" : "Seasons List"}
+            {t("seasonsList", language as "ar" | "en" | "fr")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -198,14 +196,10 @@ export default function PricingSeasons() {
             <div className="text-center py-12 text-gray-500">
               <Calendar className="w-12 h-12 mx-auto text-gray-400 mb-4" />
               <p className="text-lg">
-                {language === "ar"
-                  ? "لا توجد مواسم أسعار"
-                  : "No pricing seasons found"}
+                {t("noSeasonsFound", language as "ar" | "en" | "fr")}
               </p>
               <p className="text-sm mt-2">
-                {language === "ar"
-                  ? "انقر على زر إضافة موسم لبدء إدارة الأسعار الموسمية"
-                  : "Click the Add Season button to start managing seasonal pricing"}
+                {t("createYourFirstSeason", language as "ar" | "en" | "fr")}
               </p>
             </div>
           ) : (
@@ -224,17 +218,13 @@ export default function PricingSeasons() {
                         variant={season.isActive ? "success" : "secondary"}
                       >
                         {season.isActive
-                          ? language === "ar"
-                            ? "نشط"
-                            : "Active"
-                          : language === "ar"
-                          ? "غير نشط"
-                          : "Inactive"}
+                          ? t("active", language as "ar" | "en" | "fr")
+                          : t("inactive", language as "ar" | "en" | "fr")}
                       </Badge>
                       {currentDate >= new Date(season.startDate) &&
                         currentDate <= new Date(season.endDate) && (
                           <Badge variant="default">
-                            {language === "ar" ? "حالي" : "Current"}
+                            {t("current", language as "ar" | "en" | "fr")}
                           </Badge>
                         )}
                     </div>
@@ -242,24 +232,24 @@ export default function PricingSeasons() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
                       <div>
                         <span className="font-medium">
-                          {language === "ar" ? "من:" : "From:"}
+                          {t("from", language as "ar" | "en" | "fr")}
                         </span>{" "}
                         {new Date(season.startDate).toLocaleDateString()}
                       </div>
                       <div>
                         <span className="font-medium">
-                          {language === "ar" ? "إلى:" : "To:"}
+                          {t("to", language as "ar" | "en" | "fr")}
                         </span>{" "}
                         {new Date(season.endDate).toLocaleDateString()}
                       </div>
                       <div>
                         <span className="font-medium">
-                          {language === "ar" ? "الأسعار:" : "Prices:"}
+                          {t("prices", language as "ar" | "en" | "fr")}
                         </span>{" "}
-                        {language === "ar" ? "صباح " : "Morning "}
+                        {t("morning", language as "ar" | "en" | "fr")}{" "}
                         {season.morningPrice.toLocaleString()} دج
                         {", "}
-                        {language === "ar" ? "مساء " : "Evening "}
+                        {t("evening", language as "ar" | "en" | "fr")}{" "}
                         {season.eveningPrice.toLocaleString()} دج
                       </div>
                     </div>
@@ -277,12 +267,8 @@ export default function PricingSeasons() {
                       }
                     >
                       {season.isActive
-                        ? language === "ar"
-                          ? "تعطيل"
-                          : "Disable"
-                        : language === "ar"
-                        ? "تفعيل"
-                        : "Enable"}
+                        ? t("disabled", language as "ar" | "en" | "fr")
+                        : t("enabled", language as "ar" | "en" | "fr")}
                     </Button>
 
                     <Button
@@ -382,12 +368,8 @@ function SeasonForm({ season, onSave, onCancel, language }: any) {
           <CardTitle className="flex items-center justify-between">
             <span>
               {season
-                ? language === "ar"
-                  ? "تعديل الموسم"
-                  : "Edit Season"
-                : language === "ar"
-                ? "موسم جديد"
-                : "New Season"}
+                ? t("editSeason", language as "ar" | "en" | "fr")
+                : t("newSeason", language as "ar" | "en" | "fr")}
             </span>
             <Button variant="ghost" size="sm" onClick={onCancel}>
               ×
@@ -398,7 +380,7 @@ function SeasonForm({ season, onSave, onCancel, language }: any) {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {language === "ar" ? "اسم الموسم" : "Season Name"}
+                {t("seasonName", language as "ar" | "en" | "fr")}
               </label>
               <input
                 type="text"
@@ -414,7 +396,7 @@ function SeasonForm({ season, onSave, onCancel, language }: any) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {language === "ar" ? "تاريخ البداية" : "Start Date"}
+                  {t("startDate", language as "ar" | "en" | "fr")}
                 </label>
                 <input
                   type="date"
@@ -429,7 +411,7 @@ function SeasonForm({ season, onSave, onCancel, language }: any) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {language === "ar" ? "تاريخ النهاية" : "End Date"}
+                  {t("endDate", language as "ar" | "en" | "fr")}
                 </label>
                 <input
                   type="date"
@@ -446,9 +428,7 @@ function SeasonForm({ season, onSave, onCancel, language }: any) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {language === "ar"
-                    ? "سعر الصباح (دج)"
-                    : "Morning Price (DZD)"}
+                  {t("morningPrice", language as "ar" | "en" | "fr")}
                 </label>
                 <input
                   type="number"
@@ -464,9 +444,7 @@ function SeasonForm({ season, onSave, onCancel, language }: any) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {language === "ar"
-                    ? "سعر المساء (دج)"
-                    : "Evening Price (DZD)"}
+                  {t("eveningPrice", language as "ar" | "en" | "fr")}
                 </label>
                 <input
                   type="number"
@@ -492,20 +470,20 @@ function SeasonForm({ season, onSave, onCancel, language }: any) {
                   className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                 />
                 <span className="ml-2 text-sm text-gray-700">
-                  {language === "ar" ? "موسم نشط" : "Active Season"}
+                  {t("activeSeason", language as "ar" | "en" | "fr")}
                 </span>
               </label>
             </div>
 
             <div className="flex gap-3 justify-end pt-4">
               <Button type="button" variant="outline" onClick={onCancel}>
-                {language === "ar" ? "إلغاء" : "Cancel"}
+                {t("cancel", language as "ar" | "en" | "fr")}
               </Button>
               <Button
                 type="submit"
                 className="bg-orange-500 hover:bg-orange-600"
               >
-                {language === "ar" ? "حفظ" : "Save"}
+                {t("save", language as "ar" | "en" | "fr")}
               </Button>
             </div>
           </form>

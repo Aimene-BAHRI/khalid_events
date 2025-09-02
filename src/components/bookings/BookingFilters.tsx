@@ -1,9 +1,11 @@
 "use client";
 
+import { t } from "@/i18n/useTranslate";
 import { useState } from "react";
 
 export default function BookingFilters({
   filters,
+  clients,
   onFiltersChange,
   language,
 }: any) {
@@ -18,7 +20,7 @@ export default function BookingFilters({
   return (
     <div className="bg-white rounded-xl p-6 shadow-luxury">
       <h3 className="text-xl font-semibold mb-4 text-brand">
-        {language === "ar" ? "فلاتر الحجوزات" : "Booking Filters"}
+        {t("bookingFilters", language as "ar" | "en" | "fr")}
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -29,10 +31,13 @@ export default function BookingFilters({
           onChange={(e) => updateFilter("client", e.target.value)}
         >
           <option value="">
-            {language === "ar" ? "اختر العميل" : "Select Client"}
+            {t("selectClient", language as "ar" | "en" | "fr")}
           </option>
-          <option value="client1">Client 1</option>
-          <option value="client2">Client 2</option>
+          {clients.map((client) => (
+            <option key={client.id} value={client.id}>
+              {client.fullName}
+            </option>
+          ))}
         </select>
 
         {/* Status Filter */}
@@ -42,13 +47,13 @@ export default function BookingFilters({
           onChange={(e) => updateFilter("status", e.target.value)}
         >
           <option value="">
-            {language === "ar" ? "اختر الحالة" : "Select Status"}
+            {t("selectStatus", language as "ar" | "en" | "fr")}
           </option>
           <option value="confirmed">
-            {language === "ar" ? "مؤكد" : "Confirmed"}
+            {t("confirmed", language as "ar" | "en" | "fr")}
           </option>
           <option value="pending">
-            {language === "ar" ? "قيد الانتظار" : "Pending"}
+            {t("pending", language as "ar" | "en" | "fr")}
           </option>
         </select>
 

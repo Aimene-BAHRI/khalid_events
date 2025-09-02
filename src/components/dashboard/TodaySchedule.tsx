@@ -4,6 +4,7 @@ import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
 import { ar, enUS } from "date-fns/locale";
+import { t } from "@/i18n/useTranslate";
 
 export default function TodaySchedule({
   bookings,
@@ -21,19 +22,17 @@ export default function TodaySchedule({
     <Card className="rounded-2xl shadow-sm">
       <CardHeader>
         <CardTitle>
-          {language === "ar" ? "جدول اليوم" : "Today's Schedule"}
+          {t("todaysSchedule", language as "ar" | "en" | "fr")}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
           <p className="text-gray-500">
-            {language === "ar" ? "جاري التحميل..." : "Loading..."}
+            {t("loading", language as "ar" | "en" | "fr")}
           </p>
         ) : todayBookings.length === 0 ? (
           <p className="text-gray-500">
-            {language === "ar"
-              ? "لا توجد مواعيد اليوم"
-              : "No appointments today"}
+            {t("noAppointmentsToday", language as "ar" | "en" | "fr")}
           </p>
         ) : (
           <ul className="space-y-3">

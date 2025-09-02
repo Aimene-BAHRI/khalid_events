@@ -6,6 +6,7 @@ import { DollarSign, Plus, Filter, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { t } from "@/i18n/useTranslate";
 
 interface Payment {
   id: string;
@@ -62,32 +63,38 @@ export default function Payments() {
   };
 
   const translateMethod = (method: string) => {
-    const methodMap: { [key: string]: { ar: string; en: string } } = {
-      CASH: { ar: "نقدي", en: "Cash" },
-      CARD: { ar: "بطاقة", en: "Card" },
-      BANK_TRANSFER: { ar: "تحويل بنكي", en: "Bank Transfer" },
-      CHECK: { ar: "شيك", en: "Check" },
-    };
-    return methodMap[method]?.[language as "ar" | "en"] || method;
+    const methodMap: { [key: string]: { ar: string; en: string; fr: string } } =
+      {
+        CASH: { ar: "نقدي", en: "Cash", fr: "Espèces" },
+        CARD: { ar: "بطاقة", en: "Card", fr: "Carte" },
+        BANK_TRANSFER: {
+          ar: "تحويل بنكي",
+          en: "Bank Transfer",
+          fr: "Virement bancaire",
+        },
+        CHECK: { ar: "شيك", en: "Check", fr: "Chèque" },
+      };
+    return methodMap[method]?.[language as "ar" | "en" | "fr"] || method;
   };
 
   const translateType = (type: string) => {
-    const typeMap: { [key: string]: { ar: string; en: string } } = {
-      DEPOSIT: { ar: "عربون", en: "Deposit" },
-      PARTIAL: { ar: "جزئي", en: "Partial" },
-      FULL: { ar: "كامل", en: "Full" },
+    const typeMap: { [key: string]: { ar: string; en: string; fr: string } } = {
+      DEPOSIT: { ar: "عربون", en: "Deposit", fr: "Dépôt" },
+      PARTIAL: { ar: "جزئي", en: "Partial", fr: "Partiel" },
+      FULL: { ar: "كامل", en: "Full", fr: "Complet" },
     };
-    return typeMap[type]?.[language as "ar" | "en"] || type;
+    return typeMap[type]?.[language as "ar" | "en" | "fr"] || type;
   };
 
   const translateStatus = (status: string) => {
-    const statusMap: { [key: string]: { ar: string; en: string } } = {
-      PENDING: { ar: "قيد الانتظار", en: "Pending" },
-      COMPLETED: { ar: "مكتمل", en: "Completed" },
-      FAILED: { ar: "فاشل", en: "Failed" },
-      REFUNDED: { ar: "تم الاسترجاع", en: "Refunded" },
-    };
-    return statusMap[status]?.[language as "ar" | "en"] || status;
+    const statusMap: { [key: string]: { ar: string; en: string; fr: string } } =
+      {
+        PENDING: { ar: "قيد الانتظار", en: "Pending", fr: "En attente" },
+        COMPLETED: { ar: "مكتمل", en: "Completed", fr: "Terminé" },
+        FAILED: { ar: "فاشل", en: "Failed", fr: "Échoué" },
+        REFUNDED: { ar: "تم الاسترجاع", en: "Refunded", fr: "Remboursé" },
+      };
+    return statusMap[status]?.[language as "ar" | "en" | "fr"] || status;
   };
 
   const getStatusVariant = (status: string) => {
@@ -106,11 +113,15 @@ export default function Payments() {
   };
 
   const filteredPayments = payments.filter((payment) => {
-    if (filters.method !== "all" && payment.method !== filters.method)
+    if (filters.method !== "all" && payment.method !== filters.method) {
       return false;
-    if (filters.type !== "all" && payment.type !== filters.type) return false;
-    if (filters.status !== "all" && payment.status !== filters.status)
+    }
+    if (filters.type !== "all" && payment.type !== filters.type) {
       return false;
+    }
+    if (filters.status !== "all" && payment.status !== filters.status) {
+      return false;
+    }
     return true;
   });
 
@@ -147,12 +158,10 @@ export default function Payments() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gradient mb-2">
-            {language === "ar" ? "إدارة المدفوعات" : "Payments Management"}
+            {t("paymentsManagement", language as "ar" | "en" | "fr")}
           </h1>
           <p className="text-orange-600/70">
-            {language === "ar"
-              ? "عرض وتتبع جميع المدفوعات"
-              : "View and track all payments"}
+            {t("viewAndManageAllPayments", language as "ar" | "en" | "fr")}
           </p>
         </div>
 
@@ -163,7 +172,7 @@ export default function Payments() {
             className="border-orange-200 text-orange-700 hover:bg-orange-50"
           >
             <Download className="w-4 h-4 mr-2" />
-            {language === "ar" ? "تصدير" : "Export"}
+            {t("export", language as "ar" | "en" | "fr")}
           </Button>
         </div>
       </div>
@@ -178,7 +187,7 @@ export default function Payments() {
               </div>
               <div className="ml-4">
                 <p className="text-sm text-gray-600">
-                  {language === "ar" ? "إجمالي الإيرادات" : "Total Revenue"}
+                  {t("totalRevenue", language as "ar" | "en" | "fr")}
                 </p>
                 <p className="text-2xl font-bold text-green-600">
                   {totalRevenue.toLocaleString()} دج
@@ -196,7 +205,7 @@ export default function Payments() {
               </div>
               <div className="ml-4">
                 <p className="text-sm text-gray-600">
-                  {language === "ar" ? "المدفوعات" : "Total Payments"}
+                  {t("totalPayments", language as "ar" | "en" | "fr")}
                 </p>
                 <p className="text-2xl font-bold text-blue-600">
                   {payments.length}
@@ -214,7 +223,7 @@ export default function Payments() {
               </div>
               <div className="ml-4">
                 <p className="text-sm text-gray-600">
-                  {language === "ar" ? "معلقة" : "Pending"}
+                  {t("pendingPayments", language as "ar" | "en" | "fr")}
                 </p>
                 <p className="text-2xl font-bold text-orange-600">
                   {payments.filter((p) => p.status === "PENDING").length}
@@ -232,7 +241,7 @@ export default function Payments() {
               </div>
               <div className="ml-4">
                 <p className="text-sm text-gray-600">
-                  {language === "ar" ? "مكتملة" : "Completed"}
+                  {t("completedPayments", language as "ar" | "en" | "fr")}
                 </p>
                 <p className="text-2xl font-bold text-green-600">
                   {payments.filter((p) => p.status === "COMPLETED").length}
@@ -247,9 +256,7 @@ export default function Payments() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>
-              {language === "ar" ? "فلاتر المدفوعات" : "Payment Filters"}
-            </span>
+            <span>{t("paymentFilters", language as "ar" | "en" | "fr")}</span>
             <Filter className="w-5 h-5 text-orange-600" />
           </CardTitle>
         </CardHeader>
@@ -257,7 +264,7 @@ export default function Payments() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {language === "ar" ? "طريقة الدفع" : "Payment Method"}
+                {t("paymentMethod", language as "ar" | "en" | "fr")}
               </label>
               <select
                 value={filters.method}
@@ -267,20 +274,26 @@ export default function Payments() {
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
               >
                 <option value="all">
-                  {language === "ar" ? "الكل" : "All"}
+                  {t("all", language as "ar" | "en" | "fr")}
                 </option>
-                <option value="CASH">{translateMethod("CASH")}</option>
-                <option value="CARD">{translateMethod("CARD")}</option>
+                <option value="CASH">
+                  {t("cash", language as "ar" | "en" | "fr")}
+                </option>
+                <option value="CARD">
+                  {t("card", language as "ar" | "en" | "fr")}
+                </option>
                 <option value="BANK_TRANSFER">
-                  {translateMethod("BANK_TRANSFER")}
+                  {t("bankTransfer", language as "ar" | "en" | "fr")}
                 </option>
-                <option value="CHECK">{translateMethod("CHECK")}</option>
+                <option value="CHECK">
+                  {t("check", language as "ar" | "en" | "fr")}
+                </option>
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {language === "ar" ? "نوع الدفع" : "Payment Type"}
+                {t("paymentType", language as "ar" | "en" | "fr")}
               </label>
               <select
                 value={filters.type}
@@ -290,17 +303,23 @@ export default function Payments() {
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
               >
                 <option value="all">
-                  {language === "ar" ? "الكل" : "All"}
+                  {t("all", language as "ar" | "en" | "fr")}
                 </option>
-                <option value="DEPOSIT">{translateType("DEPOSIT")}</option>
-                <option value="PARTIAL">{translateType("PARTIAL")}</option>
-                <option value="FULL">{translateType("FULL")}</option>
+                <option value="DEPOSIT">
+                  {t("deposit", language as "ar" | "en" | "fr")}
+                </option>
+                <option value="PARTIAL">
+                  {t("partial", language as "ar" | "en" | "fr")}
+                </option>
+                <option value="FULL">
+                  {t("full", language as "ar" | "en" | "fr")}
+                </option>
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {language === "ar" ? "الحالة" : "Status"}
+                {t("paymentStatus", language as "ar" | "en" | "fr")}
               </label>
               <select
                 value={filters.status}
@@ -310,14 +329,20 @@ export default function Payments() {
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
               >
                 <option value="all">
-                  {language === "ar" ? "الكل" : "All"}
+                  {t("all", language as "ar" | "en" | "fr")}
                 </option>
-                <option value="PENDING">{translateStatus("PENDING")}</option>
+                <option value="PENDING">
+                  {t("pending", language as "ar" | "en" | "fr")}
+                </option>
                 <option value="COMPLETED">
-                  {translateStatus("COMPLETED")}
+                  {t("completed", language as "ar" | "en" | "fr")}
                 </option>
-                <option value="FAILED">{translateStatus("FAILED")}</option>
-                <option value="REFUNDED">{translateStatus("REFUNDED")}</option>
+                <option value="FAILED">
+                  {t("failed", language as "ar" | "en" | "fr")}
+                </option>
+                <option value="REFUNDED">
+                  {t("refunded", language as "ar" | "en" | "fr")}
+                </option>
               </select>
             </div>
           </div>
@@ -328,7 +353,7 @@ export default function Payments() {
       <Card>
         <CardHeader>
           <CardTitle>
-            {language === "ar" ? "قائمة المدفوعات" : "Payments List"}
+            {t("paymentList", language as "ar" | "en" | "fr")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -351,7 +376,7 @@ export default function Payments() {
             <div className="text-center py-12 text-gray-500">
               <DollarSign className="w-12 h-12 mx-auto text-gray-400 mb-4" />
               <p className="text-lg">
-                {language === "ar" ? "لا توجد مدفوعات" : "No payments found"}
+                {t("NoPaymentsFound", language as "ar" | "en" | "fr")}
               </p>
             </div>
           ) : (

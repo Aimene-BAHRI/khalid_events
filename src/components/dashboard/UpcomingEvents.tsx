@@ -3,6 +3,7 @@ import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
 import { ar, enUS } from "date-fns/locale";
+import { t } from "@/i18n/useTranslate";
 
 export default function UpcomingEvents({
   bookings,
@@ -18,17 +19,17 @@ export default function UpcomingEvents({
     <Card className="rounded-2xl shadow-sm">
       <CardHeader>
         <CardTitle>
-          {language === "ar" ? "الأحداث القادمة" : "Upcoming Events"}
+          {t("upcomingEvents", language as "ar" | "en" | "fr")}
         </CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
           <p className="text-gray-500">
-            {language === "ar" ? "جاري التحميل..." : "Loading..."}
+            {t("loading", language as "ar" | "en" | "fr")}
           </p>
         ) : upcoming.length === 0 ? (
           <p className="text-gray-500">
-            {language === "ar" ? "لا توجد أحداث قادمة" : "No upcoming events"}
+            {t("noUpcomingEvents", language as "ar" | "en" | "fr")}
           </p>
         ) : (
           <ul className="space-y-3">

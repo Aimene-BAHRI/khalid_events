@@ -7,6 +7,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import arLocale from "@fullcalendar/core/locales/ar";
 import enLocale from "@fullcalendar/core/locales/en-gb";
+import { t } from "@/i18n/useTranslate";
 
 type Booking = {
   id: string;
@@ -58,12 +59,12 @@ export default function BookingCalendar({
   return (
     <div className="bg-white rounded-xl p-6 shadow">
       <h3 className="text-xl font-semibold mb-4">
-        {language === "ar" ? "تقويم الحجوزات" : "Booking Calendar"}
+        {t("bookingCalendar", language as "ar" | "en" | "fr")}
       </h3>
 
       {loading ? (
         <p className="text-gray-500">
-          {language === "ar" ? "جاري التحميل..." : "Loading..."}
+          {t("loading", language as "ar" | "en" | "fr")}
         </p>
       ) : (
         <FullCalendar

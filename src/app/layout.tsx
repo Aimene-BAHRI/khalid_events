@@ -17,33 +17,14 @@ import {
 import { Button } from "@/components/ui/button";
 import "./globals.css";
 import Image from "next/image";
-
+import { t } from "@/i18n/useTranslate";
+import { fr } from "date-fns/locale";
 const navigationItems = [
-  {
-    title: { ar: "لوحة التحكم", en: "Dashboard" },
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: { ar: "الحجوزات", en: "Bookings" },
-    url: "/bookings",
-    icon: Calendar,
-  },
-  {
-    title: { ar: "العملاء", en: "Clients" },
-    url: "/clients",
-    icon: Users,
-  },
-  {
-    title: { ar: "المدفوعات", en: "Payments" },
-    url: "/payments",
-    icon: CreditCard,
-  },
-  {
-    title: { ar: "الأسعار الموسمية", en: "Pricing Seasons" },
-    url: "/pricing-seasons",
-    icon: Settings,
-  },
+  { key: "navDashboard", url: "/dashboard", icon: LayoutDashboard },
+  { key: "navBookings", url: "/bookings", icon: Calendar },
+  { key: "navClients", url: "/clients", icon: Users },
+  { key: "navPayments", url: "/payments", icon: CreditCard },
+  { key: "navPricingSeasons", url: "/pricing-seasons", icon: Settings },
 ];
 
 export default function RootLayout({
@@ -118,12 +99,10 @@ export default function RootLayout({
                     </div>
                     <div>
                       <h2 className="font-bold text-lg text-gradient">
-                        {language === "ar" ? "فعاليات خالد" : "khalid events"}
+                        {t("appName", language as "ar" | "en" | "fr")}
                       </h2>
                       <p className="text-xs text-orange-600/70">
-                        {language === "ar"
-                          ? "إدارة الحفلات"
-                          : "Event Management"}
+                        {t("appDesc", language as "ar" | "en" | "fr")}
                       </p>
                     </div>
                   </div>
@@ -132,7 +111,7 @@ export default function RootLayout({
                 <div className="flex-1 p-3 overflow-y-auto">
                   <div className="mb-6">
                     <h3 className="text-xs font-semibold text-orange-700/80 uppercase tracking-wider px-3 py-3">
-                      {language === "ar" ? "التنقل" : "Navigation"}
+                      {t("navigation", language as "ar" | "en" | "fr")}
                     </h3>
                     <nav className="space-y-1">
                       {navigationItems.map((item) => (
@@ -147,7 +126,7 @@ export default function RootLayout({
                         >
                           <item.icon className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                           <span className="font-medium">
-                            {item.title[language as keyof typeof item.title]}
+                            {t(item.key as keyof typeof translations, language)}
                           </span>
                         </a>
                       ))}
@@ -165,6 +144,7 @@ export default function RootLayout({
                     >
                       <option value="ar">العربية</option>
                       <option value="en">English</option>
+                      <option value="fr">Français</option>
                     </select>
                   </div>
 
@@ -182,12 +162,8 @@ export default function RootLayout({
                           </p>
                           <p className="text-xs text-orange-600 truncate">
                             {user.role === "ADMIN"
-                              ? language === "ar"
-                                ? "مدير"
-                                : "Admin"
-                              : language === "ar"
-                              ? "موظف"
-                              : "Staff"}
+                              ? t("roleAdmin", language as "ar" | "en" | "fr")
+                              : t("roleStaff", language as "ar" | "en" | "fr")}
                           </p>
                         </div>
                       </div>
@@ -218,7 +194,7 @@ export default function RootLayout({
                     <Menu className="w-5 h-5" />
                   </button>
                   <h1 className="text-xl font-bold text-gradient">
-                    {language === "ar" ? "فعاليات خالد" : "khalid events"}
+                    {t("appName", language as "ar" | "en" | "fr")}
                   </h1>
                 </div>
               </header>

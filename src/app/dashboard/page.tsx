@@ -10,6 +10,7 @@ import StatsCard from "@/components/dashboard/StatsCard";
 import TodaySchedule from "@/components/dashboard/TodaySchedule";
 import UpcomingEvents from "@/components/dashboard/UpcomingEvents";
 import RecentPayments from "@/components/dashboard/RecentPayments";
+import { t } from "@/i18n/useTranslate";
 
 export default function Dashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -94,12 +95,10 @@ export default function Dashboard() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gradient mb-2">
-            {language === "ar" ? "لوحة التحكم" : "Dashboard"}
+            {t("dashboard", language as "ar" | "fr" | "en")}
           </h1>
           <p className="text-orange-600/70">
-            {language === "ar"
-              ? "مرحباً بك في نظام إدارة قاعة الحفلات خالد إيفنتس"
-              : "Welcome to the Khaled Events Banquet Hall Management System"}
+            {t("WelcomeMessage", language as "ar" | "fr" | "en")}
           </p>
         </div>
         <div className="hidden md:flex items-center gap-2 text-sm text-orange-600">
@@ -115,7 +114,7 @@ export default function Dashboard() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
-          title={language === "ar" ? "مواعيد اليوم" : "Today's Events"}
+          title={t("todayAppointments", language as "ar" | "fr" | "en")}
           value={stats.todayAppointments}
           icon={Calendar}
           color="orange"
@@ -123,7 +122,7 @@ export default function Dashboard() {
           language={language}
         />
         <StatsCard
-          title={language === "ar" ? "إيرادات الشهر" : "Monthly Revenue"}
+          title={t("monthlyRevenue", language as "ar" | "fr" | "en")}
           value={`${stats.monthlyRevenue.toLocaleString()} دج`}
           icon={DollarSign}
           color="green"
@@ -131,7 +130,7 @@ export default function Dashboard() {
           language={language}
         />
         <StatsCard
-          title={language === "ar" ? "الأحداث القادمة" : "Upcoming Events"}
+          title={t("upcomingEvents", language as "ar" | "fr" | "en")}
           value={stats.upcomingEvents}
           icon={Clock}
           color="blue"
@@ -139,7 +138,7 @@ export default function Dashboard() {
           language={language}
         />
         <StatsCard
-          title={language === "ar" ? "مدفوعات معلقة" : "Pending Payments"}
+          title={t("pendingPayments", language as "ar" | "fr" | "en")}
           value={stats.pendingPayments}
           icon={TrendingUp}
           color="rose"
