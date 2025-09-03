@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { t } from "@/i18n/useTranslate";
+import { useLanguage } from "../context/languageContext";
 
 interface Payment {
   id: string;
@@ -31,7 +32,7 @@ interface Payment {
 export default function Payments() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
-  const [language, setLanguage] = useState("ar");
+  const { language } = useLanguage();
   const [filters, setFilters] = useState({
     method: "all",
     type: "all",
@@ -48,7 +49,6 @@ export default function Payments() {
       const userData = localStorage.getItem("user");
       if (userData) {
         const user = JSON.parse(userData);
-        setLanguage(user.language || "ar");
       }
 
       const response = await fetch("/api/payments");
@@ -74,7 +74,7 @@ export default function Payments() {
         },
         CHECK: { ar: "شيك", en: "Check", fr: "Chèque" },
       };
-    return methodMap[method]?.[language as "ar" | "en" | "fr"] || method;
+    return methodMap[method]?.[language] || method;
   };
 
   const translateType = (type: string) => {
@@ -83,7 +83,7 @@ export default function Payments() {
       PARTIAL: { ar: "جزئي", en: "Partial", fr: "Partiel" },
       FULL: { ar: "كامل", en: "Full", fr: "Complet" },
     };
-    return typeMap[type]?.[language as "ar" | "en" | "fr"] || type;
+    return typeMap[type]?.[language] || type;
   };
 
   const translateStatus = (status: string) => {
@@ -94,7 +94,7 @@ export default function Payments() {
         FAILED: { ar: "فاشل", en: "Failed", fr: "Échoué" },
         REFUNDED: { ar: "تم الاسترجاع", en: "Refunded", fr: "Remboursé" },
       };
-    return statusMap[status]?.[language as "ar" | "en" | "fr"] || status;
+    return statusMap[status]?.[language] || status;
   };
 
   const getStatusVariant = (status: string) => {
@@ -158,10 +158,10 @@ export default function Payments() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gradient mb-2">
-            {t("paymentsManagement", language as "ar" | "en" | "fr")}
+            {t("paymentsManagement", language)}
           </h1>
           <p className="text-orange-600/70">
-            {t("viewAndManageAllPayments", language as "ar" | "en" | "fr")}
+            {t("viewAndManageAllPayments", language)}
           </p>
         </div>
 
@@ -172,7 +172,7 @@ export default function Payments() {
             className="border-orange-200 text-orange-700 hover:bg-orange-50"
           >
             <Download className="w-4 h-4 mr-2" />
-            {t("export", language as "ar" | "en" | "fr")}
+            {t("export", language)}
           </Button>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default function Payments() {
               </div>
               <div className="ml-4">
                 <p className="text-sm text-gray-600">
-                  {t("totalRevenue", language as "ar" | "en" | "fr")}
+                  {t("totalRevenue", language)}
                 </p>
                 <p className="text-2xl font-bold text-green-600">
                   {totalRevenue.toLocaleString()} دج
@@ -205,7 +205,7 @@ export default function Payments() {
               </div>
               <div className="ml-4">
                 <p className="text-sm text-gray-600">
-                  {t("totalPayments", language as "ar" | "en" | "fr")}
+                  {t("totalPayments", language)}
                 </p>
                 <p className="text-2xl font-bold text-blue-600">
                   {payments.length}
@@ -223,7 +223,7 @@ export default function Payments() {
               </div>
               <div className="ml-4">
                 <p className="text-sm text-gray-600">
-                  {t("pendingPayments", language as "ar" | "en" | "fr")}
+                  {t("pendingPayments", language)}
                 </p>
                 <p className="text-2xl font-bold text-orange-600">
                   {payments.filter((p) => p.status === "PENDING").length}
@@ -241,7 +241,7 @@ export default function Payments() {
               </div>
               <div className="ml-4">
                 <p className="text-sm text-gray-600">
-                  {t("completedPayments", language as "ar" | "en" | "fr")}
+                  {t("completedPayments", language)}
                 </p>
                 <p className="text-2xl font-bold text-green-600">
                   {payments.filter((p) => p.status === "COMPLETED").length}
@@ -256,7 +256,7 @@ export default function Payments() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>{t("paymentFilters", language as "ar" | "en" | "fr")}</span>
+            <span>{t("paymentFilters", language)}</span>
             <Filter className="w-5 h-5 text-orange-600" />
           </CardTitle>
         </CardHeader>
@@ -264,7 +264,7 @@ export default function Payments() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t("paymentMethod", language as "ar" | "en" | "fr")}
+                {t("paymentMethod", language)}
               </label>
               <select
                 value={filters.method}
@@ -273,27 +273,19 @@ export default function Payments() {
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
               >
-                <option value="all">
-                  {t("all", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="CASH">
-                  {t("cash", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="CARD">
-                  {t("card", language as "ar" | "en" | "fr")}
-                </option>
+                <option value="all">{t("all", language)}</option>
+                <option value="CASH">{t("cash", language)}</option>
+                <option value="CARD">{t("card", language)}</option>
                 <option value="BANK_TRANSFER">
-                  {t("bankTransfer", language as "ar" | "en" | "fr")}
+                  {t("bankTransfer", language)}
                 </option>
-                <option value="CHECK">
-                  {t("check", language as "ar" | "en" | "fr")}
-                </option>
+                <option value="CHECK">{t("check", language)}</option>
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t("paymentType", language as "ar" | "en" | "fr")}
+                {t("paymentType", language)}
               </label>
               <select
                 value={filters.type}
@@ -302,24 +294,16 @@ export default function Payments() {
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
               >
-                <option value="all">
-                  {t("all", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="DEPOSIT">
-                  {t("deposit", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="PARTIAL">
-                  {t("partial", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="FULL">
-                  {t("full", language as "ar" | "en" | "fr")}
-                </option>
+                <option value="all">{t("all", language)}</option>
+                <option value="DEPOSIT">{t("deposit", language)}</option>
+                <option value="PARTIAL">{t("partial", language)}</option>
+                <option value="FULL">{t("full", language)}</option>
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t("paymentStatus", language as "ar" | "en" | "fr")}
+                {t("paymentStatus", language)}
               </label>
               <select
                 value={filters.status}
@@ -328,21 +312,11 @@ export default function Payments() {
                 }
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
               >
-                <option value="all">
-                  {t("all", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="PENDING">
-                  {t("pending", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="COMPLETED">
-                  {t("completed", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="FAILED">
-                  {t("failed", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="REFUNDED">
-                  {t("refunded", language as "ar" | "en" | "fr")}
-                </option>
+                <option value="all">{t("all", language)}</option>
+                <option value="PENDING">{t("pending", language)}</option>
+                <option value="COMPLETED">{t("completed", language)}</option>
+                <option value="FAILED">{t("failed", language)}</option>
+                <option value="REFUNDED">{t("refunded", language)}</option>
               </select>
             </div>
           </div>
@@ -352,9 +326,7 @@ export default function Payments() {
       {/* Payments List */}
       <Card>
         <CardHeader>
-          <CardTitle>
-            {t("paymentList", language as "ar" | "en" | "fr")}
-          </CardTitle>
+          <CardTitle>{t("paymentList", language)}</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -375,9 +347,7 @@ export default function Payments() {
           ) : filteredPayments.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
               <DollarSign className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-              <p className="text-lg">
-                {t("NoPaymentsFound", language as "ar" | "en" | "fr")}
-              </p>
+              <p className="text-lg">{t("NoPaymentsFound", language)}</p>
             </div>
           ) : (
             <div className="space-y-3">

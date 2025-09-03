@@ -96,8 +96,7 @@ export const translations = {
   recentPayments: { ar: "المدفوعات الأخيرة", en: "Recent Payments", fr: "Paiements récents" },
   noPaymentsYet: { ar: "لا توجد مدفوعات حتى الآن", en: "No payments yet", fr: "Pas encore de paiements" },
   booking: { ar: "الحجز#", en: "Booking #", fr: "Réservation #" },
-  
-  
+
   // PricingSeasons page
   deleteSeasonConfirmation: {
     ar: "هل أنت متأكد أنك تريد حذف هذا الموسم؟",
@@ -169,13 +168,59 @@ export const translations = {
   cancel: { ar: "إلغاء", en: "Cancel", fr: "Annuler" },
   edit: { ar: "تعديل", en: "Edit", fr: "Modifier" },
   delete: { ar: "حذف", en: "Delete", fr: "Supprimer" },
-
-
-
-
-
   // clients page
+  clientManagement: { ar: "إدارة العملاء", en: "Client Management", fr: "Gestion des clients" },
+  viewAndManageAllClients: {
+    ar: "عرض وإدارة جميع العملاء",
+    en: "View and manage all clients",
+    fr: "Voir et gérer tous les clients",
+  },
+  clientList: { ar: "قائمة العملاء", en: "Client List", fr: "Liste des clients" },
+  Table: { ar: "الجدول", en: "Table", fr: "Tableau" },
+  Cards: { ar: "البطاقات", en: "Cards", fr: "Cartes" },
+  newClient: { ar: "عميل جديد", en: "New Client", fr: "Nouveau client" },
+  addNewClient: { ar: "إضافة عميل جديد", en: "Add New Client", fr: "Ajouter un nouveau client" },
+  searchClients: { ar: "البحث عن العملاء", en: "Search Clients", fr: "Rechercher des clients" },
+  allStatus: { ar: "كل الحالات", en: "All Status", fr: "Tous les statuts" },
+  completed: { ar: "مكتمل", en: "Completed", fr: "Terminé" },
+  noBooking: { ar: "لا يوجد حجز", en: "No Booking", fr: "Aucune réservation" },
+  totalClients: { ar: "إجمالي العملاء", en: "Total Clients", fr: "Total des clients" },
+  activeBookings: { ar: "الحجوزات النشطة", en: "Active Bookings", fr: "Réservations actives" },
+  totalRevenue: { ar: "إجمالي الإيرادات", en: "Total Revenue", fr: "Revenu total" },
+  contact: { ar: "الاتصال", en: "Contact", fr: "Contact" },
+  latestBooking: { ar: "أحدث حجز", en: "Latest Booking", fr: "Dernière réservation" },
+  guests: { ar: "الضيوف", en: "Guests", fr: "Invités" },
+  payment: { ar: "الدفع", en: "Payment", fr: "Paiement" },
+  actions: { ar: "الإجراءات", en: "Actions", fr: "Actions" },
+  noClientsFound: { ar: "لم يتم العثور على عملاء", en: "No clients found", fr: "Aucun client trouvé" },
+  noEmail: { ar: "لا يوجد بريد إلكتروني", en: "No Email", fr: "Pas d'email" },
+  noPhone: { ar: "لا يوجد رقم هاتف", en: "No Phone", fr: "Pas de téléphone" },
+  notSpecified: { ar: "غير محدد", en: "Not Specified", fr: "Non spécifié" },
+  book: { ar: "احجز", en: "Book", fr: "Réserver" },
+  // client form
+  firstName: { ar: "الاسم الأول", en: "First Name", fr: "Prénom" },
+  enterFirstName: { ar: "أدخل الاسم الأول", en: "Enter first name", fr: "Entrez le prénom" },
+  lastName: { ar: "اسم العائلة", en: "Last Name", fr: "Nom de famille" },
+  enterLastName: { ar: "أدخل اسم العائلة", en: "Enter last name", fr: "Entrez le nom de famille" },
+  email: { ar: "البريد الإلكتروني", en: "Email", fr: "Email" },
+  phoneNumber: { ar: "رقم الهاتف", en: "Phone Number", fr: "Numéro de téléphone" },
+  numberOfGuests: { ar: "عدد الضيوف", en: "Number of Guests", fr: "Nombre d'invités" },
+  menuDetails: { ar: "تفاصيل القائمة", en: "Menu Details", fr: "Détails du menu" },
+  specialNotes: { ar: "ملاحظات خاصة", en: "Special Notes", fr: "Remarques spéciales" },
+  anySpecialRequirements: { ar: "هل لديك أي متطلبات خاصة؟", en: "Any special requirements?", fr: "Des exigences particulières?" },
+  creating: { ar: "جاري الإنشاء...", en: "Creating...", fr: "Création..." },
+  // payments page
 
+  searchByNameOrEmail: {
+    ar: "البحث بالاسم أو البريد الإلكتروني",
+    en: "Search by name or email",
+    fr: "Rechercher par nom ou email"
+  },
+
+  backToDashboard: { ar: "العودة إلى لوحة التحكم", en: "Back to Dashboard", fr: "Retour au tableau de bord" },
+  addClient: { ar: "إضافة عميل", en: "Add Client", fr: "Ajouter un client" },
+
+  
   // payments page
   paymentsManagement: { ar: "إدارة المدفوعات", en: "Payments Management", fr: "Gestion des paiements" },
   viewAndManageAllPayments: {
@@ -184,7 +229,6 @@ export const translations = {
     fr: "Voir et gérer tous les paiements",
   },
   export: { ar: "تصدير", en: "Export", fr: "Exporter" },
-  totalRevenue: { ar: "إجمالي الإيرادات", en: "Total Revenue", fr: "Revenu total" },
   totalPayments: { ar: "إجمالي المدفوعات", en: "Total Payments", fr: "Total des paiements" },
   totalPending: { ar: "إجمالي المبلغ المعلق", en: "Total Pending Amount", fr: "Montant total en attente" },
   completedPayments: { ar: "المدفوعات المكتملة", en: "Completed Payments", fr: "Paiements terminés" },
@@ -200,11 +244,10 @@ export const translations = {
   partial: { ar: "جزئي", en: "Partial", fr: "Partiel" },
   full: { ar: "كامل", en: "Full", fr: "Complet" },
   paymentStatus: { ar: "حالة الدفع", en: "Payment Status", fr: "Statut du paiement" },
-  completed: { ar: "مكتمل", en: "Completed", fr: "Terminé" },
   failed: { ar: "فاشل", en: "Failed", fr: "Échoué" },
   refunded: { ar: "تم الاسترجاع", en: "Refunded", fr: "Remboursé" },
   paymentList: { ar: "قائمة المدفوعات", en: "Payment List", fr: "Liste des paiements" },
-  NoPaymentsFound: { ar: "لم يتم العثور على مدفوعات", en: "No payments found", fr: "Aucun paiement trouvé" },
-
+  NoPaymentsFound: { ar: "لم يتم العثور على مدفوعات", en: "No payments found", fr: "Aucun paiement trouvé" }
   }
+
 export type SupportedLang = keyof typeof translations["loading"]; // "en" | "ar" | "fr"

@@ -18,19 +18,13 @@ export default function UpcomingEvents({
   return (
     <Card className="rounded-2xl shadow-sm">
       <CardHeader>
-        <CardTitle>
-          {t("upcomingEvents", language as "ar" | "en" | "fr")}
-        </CardTitle>
+        <CardTitle>{t("upcomingEvents", language)}</CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
-          <p className="text-gray-500">
-            {t("loading", language as "ar" | "en" | "fr")}
-          </p>
+          <p className="text-gray-500">{t("loading", language)}</p>
         ) : upcoming.length === 0 ? (
-          <p className="text-gray-500">
-            {t("noUpcomingEvents", language as "ar" | "en" | "fr")}
-          </p>
+          <p className="text-gray-500">{t("noUpcomingEvents", language)}</p>
         ) : (
           <ul className="space-y-3">
             {upcoming.map((b: any) => {

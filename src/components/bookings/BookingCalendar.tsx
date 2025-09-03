@@ -59,13 +59,11 @@ export default function BookingCalendar({
   return (
     <div className="bg-white rounded-xl p-6 shadow">
       <h3 className="text-xl font-semibold mb-4">
-        {t("bookingCalendar", language as "ar" | "en" | "fr")}
+        {t("bookingCalendar", language)}
       </h3>
 
       {loading ? (
-        <p className="text-gray-500">
-          {t("loading", language as "ar" | "en" | "fr")}
-        </p>
+        <p className="text-gray-500">{t("loading", language)}</p>
       ) : (
         <FullCalendar
           ref={calendarRef}

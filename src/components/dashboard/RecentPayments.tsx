@@ -9,19 +9,13 @@ export default function RecentPayments({ payments, loading, language }: any) {
   return (
     <Card className="rounded-2xl shadow-sm">
       <CardHeader>
-        <CardTitle>
-          {t("recentPayments", language as "ar" | "en" | "fr")}
-        </CardTitle>
+        <CardTitle>{t("recentPayments", language)}</CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
-          <p className="text-gray-500">
-            {t("loading", language as "ar" | "en" | "fr")}
-          </p>
+          <p className="text-gray-500">{t("loading", language)}</p>
         ) : recent.length === 0 ? (
-          <p className="text-gray-500">
-            {t("noPaymentsYet", language as "ar" | "en" | "fr")}
-          </p>
+          <p className="text-gray-500">{t("noPaymentsYet", language)}</p>
         ) : (
           <ul className="space-y-3">
             {recent.map((p: any, index: number) => {
@@ -33,7 +27,7 @@ export default function RecentPayments({ payments, loading, language }: any) {
                 >
                   <div>
                     <p className="font-medium">
-                      {t("booking", language as "ar" | "en" | "fr")}
+                      {t("booking", language)}
                       {index + 1 || "—"} <br />
                       {booking?.title || booking?.client?.fullName}
                     </p>

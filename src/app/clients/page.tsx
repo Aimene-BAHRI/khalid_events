@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,8 +38,12 @@ import {
   Edit,
   Loader2,
   Search,
+  Filter,
+  Download,
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
+import { useLanguage } from "@/app/context/languageContext";
+import { t } from "@/i18n/useTranslate";
 
 interface Payment {
   id: string;
@@ -77,7 +81,7 @@ interface Client {
 }
 
 export default function ClientsPage() {
-  const { t } = useTranslation();
+  const { language } = useLanguage();
   const [clients, setClients] = useState<Client[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -86,6 +90,7 @@ export default function ClientsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [view, setView] = useState("table");
 
   const fetchClients = async () => {
     try {
@@ -105,6 +110,28 @@ export default function ClientsPage() {
     fetchClients();
   }, []);
 
+  const exportClientsCSV = async () => {
+    try {
+      const res = await fetch("/api/clients/export");
+      if (!res.ok) throw new Error("Failed to export CSV");
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      // Create temporary link to trigger download
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "clients.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to export clients CSV");
+    }
+  };
+
   const getClientStatus = (client: Client) => {
     if (!client.bookings || client.bookings.length === 0) return "no-booking";
     return client.bookings[0].status;
@@ -117,9 +144,9 @@ export default function ClientsPage() {
       case "DEPOSIT_PAID":
         return "secondary";
       case "RESERVED":
-        return "warning"; // ✅ changed from "outline"
+        return "warning";
       case "COMPLETED":
-        return "success"; // ✅ maybe better than "default"?
+        return "success";
       default:
         return "default";
     }
@@ -156,182 +183,208 @@ export default function ClientsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-card/30 to-amber-50/20">
+    <div className="p-6 space-y-6 max-w-7xl mx-auto">
       {/* Header */}
-      <header className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" /> Back to Dashboard
-              </Button>
-            </Link>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <Crown className="h-6 w-6 text-primary" />
-                <Heart className="h-5 w-5 text-secondary fill-secondary" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold font-serif text-primary">
-                  Client Management
-                </h1>
-                <p className="text-xs text-muted-foreground">
-                  Bella Vista Venue
-                </p>
-              </div>
-            </div>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gradient mb-2">
+            {t("clientManagement", language)}
+          </h1>
+          <p className="text-orange-600/70">
+            {t("viewAndManageAllClients", language)}
+          </p>
+        </div>
+
+        <div className="flex gap-3">
+          <div className="flex rounded-lg border border-orange-200 p-1">
+            <Button
+              variant={view === "table" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setView("table")}
+              className={
+                view === "table"
+                  ? "bg-orange-500 hover:bg-orange-600"
+                  : "hover:bg-orange-50"
+              }
+            >
+              <Filter className="w-4 h-4 mr-2" />
+              {t("Table", language)}
+            </Button>
+            <Button
+              variant={view === "cards" ? "default" : "ghost"}
+              size="sm"
+              onClick={() => setView("cards")}
+              className={
+                view === "cards"
+                  ? "bg-orange-500 hover:bg-orange-600"
+                  : "hover:bg-orange-50"
+              }
+            >
+              <Users className="w-4 h-4 mr-2" />
+              {t("Cards", language)}
+            </Button>
           </div>
+
           <Dialog
             open={isClientDialogOpen}
             onOpenChange={setIsClientDialogOpen}
           >
             <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-primary/90">
-                <Plus className="h-4 w-4 mr-2" /> Add Client
+              <Button className="bg-orange-500 hover:bg-orange-600">
+                <Plus className="h-4 w-4 mr-2" /> {t("newClient", language)}
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-2xl bg-white">
               <DialogHeader>
-                <DialogTitle className="font-serif flex items-center gap-2">
-                  <Users className="h-5 w-5 text-primary" /> Add New Client
+                <DialogTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-orange-500" />{" "}
+                  {t("addNewClient", language)}
                 </DialogTitle>
               </DialogHeader>
               <ClientForm
                 onClose={() => setIsClientDialogOpen(false)}
                 onSuccess={fetchClients}
+                language={language}
               />
             </DialogContent>
           </Dialog>
+          <Button
+            onClick={exportClientsCSV}
+            className="border-orange-300 text-orange-600 hover:bg-orange-50"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            {t("exportCSV", language)}
+          </Button>
         </div>
-      </header>
+      </div>
+
+      {error && (
+        <Alert variant="destructive" className="mb-6">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+      {success && (
+        <Alert className="mb-6 border-green-500/20 bg-green-500/10">
+          <AlertDescription className="text-green-700">
+            {success}
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Search & Filter */}
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-        {success && (
-          <Alert className="mb-6 border-secondary/20 bg-secondary/10">
-            <AlertDescription className="text-secondary-foreground">
-              {success}
-            </AlertDescription>
-          </Alert>
-        )}
-
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search clients by name, email, or phone..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 h-12 bg-card/60 backdrop-blur-sm"
-            />
-          </div>
-          <div className="flex gap-2">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-12 bg-card/60 backdrop-blur-sm px-3 rounded"
-            >
-              <option value="all">All Status</option>
-              <option value="RESERVED">Reserved</option>
-              <option value="DEPOSIT_PAID">Deposit Paid</option>
-              <option value="CONFIRMED">Confirmed</option>
-              <option value="COMPLETED">Completed</option>
-              <option value="no-booking">No Booking</option>
-            </select>
-          </div>
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder={t("searchClients", language)}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 h-12"
+          />
         </div>
-
-        {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-card/60 backdrop-blur-sm border-primary/10 hover:shadow-lg transition-all duration-200">
-            <CardContent className="p-6 flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Total Clients
-                </p>
-                <p className="text-2xl font-bold text-primary">
-                  {clients.length}
-                </p>
-              </div>
-              <Users className="h-8 w-8 text-primary" />
-            </CardContent>
-          </Card>
-          <Card className="bg-card/60 backdrop-blur-sm border-secondary/10 hover:shadow-lg transition-all duration-200">
-            <CardContent className="p-6 flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Active Bookings
-                </p>
-                <p className="text-2xl font-bold text-secondary">
-                  {
-                    clients.filter(
-                      (c) =>
-                        getClientStatus(c) !== "COMPLETED" &&
-                        getClientStatus(c) !== "no-booking"
-                    ).length
-                  }
-                </p>
-              </div>
-              <Calendar className="h-8 w-8 text-secondary" />
-            </CardContent>
-          </Card>
-          <Card className="bg-card/60 backdrop-blur-sm border-accent/10 hover:shadow-lg transition-all duration-200">
-            <CardContent className="p-6 flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold text-accent">
-                  $
-                  {clients
-                    .reduce((sum, c) => sum + getTotalPaid(c), 0)
-                    .toLocaleString()}
-                </p>
-              </div>
-              <DollarSign className="h-8 w-8 text-accent" />
-            </CardContent>
-          </Card>
-          <Card className="bg-card/60 backdrop-blur-sm border-destructive/10 hover:shadow-lg transition-all duration-200">
-            <CardContent className="p-6 flex justify-between items-center">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">
-                  Pending Payments
-                </p>
-                <p className="text-2xl font-bold text-destructive">
-                  $
-                  {clients
-                    .reduce((sum, c) => sum + getRemainingBalance(c), 0)
-                    .toLocaleString()}
-                </p>
-              </div>
-              <DollarSign className="h-8 w-8 text-destructive" />
-            </CardContent>
-          </Card>
+        <div className="flex gap-2">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="h-12 px-3 rounded border"
+          >
+            <option value="all">{t("allStatus", language)}</option>
+            <option value="RESERVED">{t("reserved", language)}</option>
+            <option value="DEPOSIT_PAID">{t("depositPaid", language)}</option>
+            <option value="CONFIRMED">{t("confirmed", language)}</option>
+            <option value="COMPLETED">{t("completed", language)}</option>
+            <option value="no-booking">{t("noBooking", language)}</option>
+          </select>
         </div>
+      </div>
 
-        {/* Client Table */}
-        <Card className="bg-card/60 backdrop-blur-sm">
+      {/* Stats */}
+      <div className="grid md:grid-cols-4 gap-6 mb-8">
+        <Card className="border-orange-200">
+          <CardContent className="p-6 flex justify-between items-center">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">
+                {t("totalClients", language)}
+              </p>
+              <p className="text-2xl font-bold text-orange-600">
+                {clients.length}
+              </p>
+            </div>
+            <Users className="h-8 w-8 text-orange-500" />
+          </CardContent>
+        </Card>
+        <Card className="border-orange-200">
+          <CardContent className="p-6 flex justify-between items-center">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">
+                {t("activeBookings", language)}
+              </p>
+              <p className="text-2xl font-bold text-orange-600">
+                {
+                  clients.filter(
+                    (c) =>
+                      getClientStatus(c) !== "COMPLETED" &&
+                      getClientStatus(c) !== "no-booking"
+                  ).length
+                }
+              </p>
+            </div>
+            <Calendar className="h-8 w-8 text-orange-500" />
+          </CardContent>
+        </Card>
+        <Card className="border-orange-200">
+          <CardContent className="p-6 flex justify-between items-center">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">
+                {t("totalRevenue", language)}
+              </p>
+              <p className="text-2xl font-bold text-orange-600">
+                $
+                {clients
+                  .reduce((sum, c) => sum + getTotalPaid(c), 0)
+                  .toLocaleString()}
+              </p>
+            </div>
+            <DollarSign className="h-8 w-8 text-orange-500" />
+          </CardContent>
+        </Card>
+        <Card className="border-orange-200">
+          <CardContent className="p-6 flex justify-between items-center">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">
+                {t("pendingPayments", language)}
+              </p>
+              <p className="text-2xl font-bold text-orange-600">
+                $
+                {clients
+                  .reduce((sum, c) => sum + getRemainingBalance(c), 0)
+                  .toLocaleString()}
+              </p>
+            </div>
+            <DollarSign className="h-8 w-8 text-orange-500" />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Client Table/Cards View */}
+      {view === "table" ? (
+        <Card>
           <CardHeader>
-            <CardTitle className="font-serif flex items-center gap-2">
-              Client List ({filteredClients.length})
+            <CardTitle className="flex items-center gap-2">
+              {t("clientList", language)} ({filteredClients.length})
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Contact</TableHead>
-                  <TableHead>Latest Booking</TableHead>
-                  <TableHead>Guests</TableHead>
-                  <TableHead>Payment</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead>{t("client", language)}</TableHead>
+                  <TableHead>{t("contact", language)}</TableHead>
+                  <TableHead>{t("latestBooking", language)}</TableHead>
+                  <TableHead>{t("guests", language)}</TableHead>
+                  <TableHead>{t("payment", language)}</TableHead>
+                  <TableHead>{t("status", language)}</TableHead>
+                  <TableHead>{t("actions", language)}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -346,9 +399,11 @@ export default function ClientsPage() {
                         </p>
                       </TableCell>
                       <TableCell>
-                        <p className="text-sm">{client.email || "No email"}</p>
+                        <p className="text-sm">
+                          {client.email || t("noEmail", language)}
+                        </p>
                         <p className="text-sm text-muted-foreground">
-                          {client.phoneNumber || "No phone"}
+                          {client.phoneNumber || t("noPhone", language)}
                         </p>
                       </TableCell>
                       <TableCell>
@@ -358,12 +413,12 @@ export default function ClientsPage() {
                           </p>
                         ) : (
                           <p className="text-sm text-muted-foreground">
-                            No booking
+                            {t("noBooking", language)}
                           </p>
                         )}
                       </TableCell>
                       <TableCell>
-                        {client.guestCount || "Not specified"}
+                        {client.guestCount || t("notSpecified", language)}
                       </TableCell>
                       <TableCell>
                         <p className="text-sm font-medium">
@@ -378,9 +433,16 @@ export default function ClientsPage() {
                           variant={getStatusColor(
                             latestBooking?.status || "no-booking"
                           )}
+                          className={
+                            latestBooking?.status === "RESERVED"
+                              ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
+                              : latestBooking?.status === "COMPLETED"
+                              ? "bg-green-100 text-green-800 hover:bg-green-200"
+                              : ""
+                          }
                         >
                           {latestBooking?.status.replace("_", " ") ||
-                            "No Booking"}
+                            t("noBooking", language)}
                         </Badge>
                       </TableCell>
                       <TableCell className="flex gap-2">
@@ -388,21 +450,34 @@ export default function ClientsPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => setSelectedClient(client)}
+                          className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Link href={`/calendar?client=${client.id}`}>
-                          <Button variant="ghost" size="sm">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                          >
                             <CalendarPlus className="h-4 w-4" />
                           </Button>
                         </Link>
                         {client.phoneNumber && (
-                          <Button variant="ghost" size="sm">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                          >
                             <Phone className="h-4 w-4" />
                           </Button>
                         )}
                         {client.email && (
-                          <Button variant="ghost" size="sm">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                          >
                             <Mail className="h-4 w-4" />
                           </Button>
                         )}
@@ -414,19 +489,117 @@ export default function ClientsPage() {
             </Table>
           </CardContent>
         </Card>
-      </div>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredClients.map((client) => {
+            const latestBooking = client.bookings?.[0];
+            const status = latestBooking?.status || "no-booking";
+
+            return (
+              <Card key={client.id} className="border-orange-200">
+                <CardHeader className="pb-3">
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg">{client.fullName}</CardTitle>
+                    <Badge
+                      variant={getStatusColor(status)}
+                      className={
+                        status === "RESERVED"
+                          ? "bg-amber-100 text-amber-800"
+                          : status === "COMPLETED"
+                          ? "bg-green-100 text-green-800"
+                          : ""
+                      }
+                    >
+                      {status.replace("_", " ") || t("noBooking", language)}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    ID: {client.id.slice(0, 8)}
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <p className="text-sm font-medium">
+                      {t("contact", language)}
+                    </p>
+                    <p className="text-sm">
+                      {client.email || t("noEmail", language)}
+                    </p>
+                    <p className="text-sm">
+                      {client.phoneNumber || t("noPhone", language)}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium">
+                      {t("latestBooking", language)}
+                    </p>
+                    <p className="text-sm">
+                      {latestBooking
+                        ? new Date(latestBooking.date).toLocaleDateString()
+                        : t("noBooking", language)}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium">
+                      {t("guests", language)}
+                    </p>
+                    <p className="text-sm">
+                      {client.guestCount || t("notSpecified", language)}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium">
+                      {t("payment", language)}
+                    </p>
+                    <p className="text-sm">
+                      ${getTotalPaid(client).toLocaleString()} of $
+                      {getTotalAmount(client).toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div className="flex gap-2 pt-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedClient(client)}
+                      className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                    >
+                      <Edit className="h-3 w-3 mr-1" /> {t("edit", language)}
+                    </Button>
+                    <Link href={`/calendar?client=${client.id}`}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                      >
+                        <CalendarPlus className="h-3 w-3 mr-1" />{" "}
+                        {t("book", language)}
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
 
-// --- ClientForm remains mostly unchanged, same as your current code ---
 function ClientForm({
   onClose,
   onSuccess,
+  language,
 }: {
   onClose: () => void;
   onSuccess: () => void;
+  language: string;
 }) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -461,10 +634,10 @@ function ClientForm({
         onClose();
       } else {
         const data = await response.json();
-        setError(data.error || "Failed to create client");
+        setError(data.error || t("failedToCreateClient", language));
       }
     } catch (error) {
-      setError("An error occurred while creating the client");
+      setError(t("errorCreatingClient", language));
     } finally {
       setIsLoading(false);
     }
@@ -480,27 +653,27 @@ function ClientForm({
 
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="firstName">First Name *</Label>
+          <Label htmlFor="firstName">{t("firstName", language)} *</Label>
           <Input
             id="firstName"
             value={formData.firstName}
             onChange={(e) =>
               setFormData({ ...formData, firstName: e.target.value })
             }
-            placeholder="Enter first name"
+            placeholder={t("enterFirstName", language)}
             required
             disabled={isLoading}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name *</Label>
+          <Label htmlFor="lastName">{t("lastName", language)} *</Label>
           <Input
             id="lastName"
             value={formData.lastName}
             onChange={(e) =>
               setFormData({ ...formData, lastName: e.target.value })
             }
-            placeholder="Enter last name"
+            placeholder={t("enterLastName", language)}
             required
             disabled={isLoading}
           />
@@ -509,7 +682,7 @@ function ClientForm({
 
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("email", language)}</Label>
           <Input
             id="email"
             type="email"
@@ -522,7 +695,7 @@ function ClientForm({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="phone">Phone Number</Label>
+          <Label htmlFor="phone">{t("phoneNumber", language)}</Label>
           <Input
             id="phone"
             type="tel"
@@ -537,7 +710,7 @@ function ClientForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="guestCount">Number of Guests</Label>
+        <Label htmlFor="guestCount">{t("numberOfGuests", language)}</Label>
         <Input
           id="guestCount"
           type="number"
@@ -551,26 +724,26 @@ function ClientForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="menuDetails">Menu Details</Label>
+        <Label htmlFor="menuDetails">{t("menuDetails", language)}</Label>
         <Textarea
           id="menuDetails"
           value={formData.menuDetails}
           onChange={(e) =>
             setFormData({ ...formData, menuDetails: e.target.value })
           }
-          placeholder="Special dietary requirements, menu preferences..."
+          placeholder={t("specialDietaryRequirements", language)}
           rows={3}
           disabled={isLoading}
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="notes">Special Notes</Label>
+        <Label htmlFor="notes">{t("specialNotes", language)}</Label>
         <Textarea
           id="notes"
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          placeholder="Any special requirements or notes..."
+          placeholder={t("anySpecialRequirements", language)}
           rows={3}
           disabled={isLoading}
         />
@@ -582,19 +755,24 @@ function ClientForm({
           variant="outline"
           onClick={onClose}
           disabled={isLoading}
+          className="border-orange-300 text-orange-600 hover:bg-orange-50"
         >
-          Cancel
+          {t("cancel", language)}
         </Button>
-        <Button type="submit" disabled={isLoading}>
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="bg-orange-500 hover:bg-orange-600"
+        >
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Creating...
+              {t("creating", language)}
             </>
           ) : (
             <>
               <Plus className="mr-2 h-4 w-4" />
-              Add Client
+              {t("addClient", language)}
             </>
           )}
         </Button>

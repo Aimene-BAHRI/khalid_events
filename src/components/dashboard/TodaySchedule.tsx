@@ -21,19 +21,13 @@ export default function TodaySchedule({
   return (
     <Card className="rounded-2xl shadow-sm">
       <CardHeader>
-        <CardTitle>
-          {t("todaysSchedule", language as "ar" | "en" | "fr")}
-        </CardTitle>
+        <CardTitle>{t("todaysSchedule", language)}</CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
-          <p className="text-gray-500">
-            {t("loading", language as "ar" | "en" | "fr")}
-          </p>
+          <p className="text-gray-500">{t("loading", language)}</p>
         ) : todayBookings.length === 0 ? (
-          <p className="text-gray-500">
-            {t("noAppointmentsToday", language as "ar" | "en" | "fr")}
-          </p>
+          <p className="text-gray-500">{t("noAppointmentsToday", language)}</p>
         ) : (
           <ul className="space-y-3">
             {todayBookings.map((b: any) => {

@@ -3,13 +3,13 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { t } from "@/i18n/useTranslate";
+import { useLanguage } from "@/app/context/languageContext";
 
 interface BookingFormProps {
   booking?: any;
   clients: any[];
   onSave: (data: any) => void;
   onCancel: () => void;
-  language: string;
   user: any;
 }
 
@@ -18,9 +18,9 @@ const BookingForm: React.FC<BookingFormProps> = ({
   clients,
   onSave,
   onCancel,
-  language,
   user,
 }) => {
+  const { language } = useLanguage();
   const [formData, setFormData] = useState({
     clientId: booking?.clientId || "",
     userId: user?.id || "",
@@ -41,9 +41,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
   return (
     <Card className="fixed inset-0 m-auto max-w-2xl h-fit max-h-[90vh] overflow-y-auto z-50">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>
-          {t("bookingForm", language as "ar" | "en" | "fr")}
-        </CardTitle>
+        <CardTitle>{t("bookingForm", language)}</CardTitle>
         <Button variant="ghost" size="sm" onClick={onCancel}>
           <X className="w-4 h-4" />
         </Button>
@@ -52,7 +50,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("client", language as "ar" | "en" | "fr")}
+              {t("client", language)}
             </label>
             <select
               value={formData.clientId}
@@ -62,9 +60,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
               required
             >
-              <option value="">
-                {t("selectClient", language as "ar" | "en" | "fr")}
-              </option>
+              <option value="">{t("selectClient", language)}</option>
               {clients.map((client) => (
                 <option key={client.id} value={client.id}>
                   {client.fullName}
@@ -76,7 +72,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("date", language as "ar" | "en" | "fr")}
+                {t("date", language)}
               </label>
               <input
                 type="date"
@@ -91,7 +87,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("timeSlot", language as "ar" | "en" | "fr")}
+                {t("timeSlot", language)}
               </label>
               <select
                 value={formData.timeSlot}
@@ -101,12 +97,8 @@ const BookingForm: React.FC<BookingFormProps> = ({
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-orange-500 focus:border-orange-500"
                 required
               >
-                <option value="MORNING">
-                  {t("morning", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="EVENING">
-                  {t("evening", language as "ar" | "en" | "fr")}
-                </option>
+                <option value="MORNING">{t("morning", language)}</option>
+                <option value="EVENING">{t("evening", language)}</option>
               </select>
             </div>
           </div>
@@ -114,7 +106,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("status", language as "ar" | "en" | "fr")}
+                {t("status", language)}
               </label>
               <select
                 value={formData.status}
@@ -132,30 +124,20 @@ const BookingForm: React.FC<BookingFormProps> = ({
                   FULLY_PAID
                   CANCELLED
                 } */}
-                <option value="INQUIRY">
-                  {t("inquiry", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="RESERVED">
-                  {t("reserved", language as "ar" | "en" | "fr")}
-                </option>
+                <option value="INQUIRY">{t("inquiry", language)}</option>
+                <option value="RESERVED">{t("reserved", language)}</option>
                 <option value="DEPOSIT_PAID">
-                  {t("depositPaid", language as "ar" | "en" | "fr")}
+                  {t("depositPaid", language)}
                 </option>
-                <option value="CONFIRMED">
-                  {t("confirmed", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="FULLY_PAID">
-                  {t("fullyPaid", language as "ar" | "en" | "fr")}
-                </option>
-                <option value="CANCELLED">
-                  {t("cancelled", language as "ar" | "en" | "fr")}
-                </option>
+                <option value="CONFIRMED">{t("confirmed", language)}</option>
+                <option value="FULLY_PAID">{t("fullyPaid", language)}</option>
+                <option value="CANCELLED">{t("cancelled", language)}</option>
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("totalPrice", language as "ar" | "en" | "fr")}
+                {t("totalPrice", language)}
               </label>
               <input
                 type="number"
@@ -171,7 +153,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("paidAmount", language as "ar" | "en" | "fr")}
+              {t("paidAmount", language)}
             </label>
             <input
               type="number"
@@ -186,7 +168,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("notes", language as "ar" | "en" | "fr")}
+              {t("notes", language)}
             </label>
             <textarea
               value={formData.notes}
@@ -200,10 +182,10 @@ const BookingForm: React.FC<BookingFormProps> = ({
 
           <div className="flex gap-3 justify-end pt-4">
             <Button type="button" variant="outline" onClick={onCancel}>
-              {t("cancel", language as "ar" | "en" | "fr")}
+              {t("cancel", language)}
             </Button>
             <Button type="submit" className="bg-orange-500 hover:bg-orange-600">
-              {t("save", language as "ar" | "en" | "fr")}
+              {t("save", language)}
             </Button>
           </div>
         </form>

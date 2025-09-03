@@ -10,11 +10,12 @@ import BookingList from "@/components/bookings/BookingList";
 import BookingCalendar from "@/components/bookings/BookingCalendar";
 import BookingFilters from "@/components/bookings/BookingFilters";
 import { t } from "@/i18n/useTranslate";
+import { useLanguage } from "../context/languageContext";
 export default function Bookings() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
-  const [language, setLanguage] = useState("ar");
+  const { language } = useLanguage();
 
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -59,7 +60,6 @@ export default function Bookings() {
       if (userData) {
         const parsed = JSON.parse(userData);
         setUser(parsed);
-        setLanguage(parsed.language || "ar");
       }
 
       const [bookingsRes, clientsRes] = await Promise.all([
@@ -118,10 +118,10 @@ export default function Bookings() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gradient mb-2">
-            {t("bookingManagement", language as "ar" | "en" | "fr")}
+            {t("bookingManagement", language)}
           </h1>
           <p className="text-orange-600/70">
-            {t("viewAndManageAllVenueBookings", language as "ar" | "en" | "fr")}
+            {t("viewAndManageAllVenueBookings", language)}
           </p>
         </div>
 
@@ -138,7 +138,7 @@ export default function Bookings() {
               }
             >
               <Calendar className="w-4 h-4 mr-2" />
-              {t("Calendar", language as "ar" | "en" | "fr")}
+              {t("Calendar", language)}
             </Button>
             <Button
               variant={view === "list" ? "default" : "ghost"}
@@ -151,7 +151,7 @@ export default function Bookings() {
               }
             >
               <Filter className="w-4 h-4 mr-2" />
-              {t("List", language as "ar" | "en" | "fr")}
+              {t("List", language)}
             </Button>
           </div>
 
@@ -170,13 +170,13 @@ export default function Bookings() {
             className="bg-orange-500 hover:bg-orange-600"
           >
             <Plus className="w-4 h-4 mr-2" />
-            {t("newBooking", language as "ar" | "en" | "fr")}
+            {t("newBooking", language)}
           </Button>
           <Button
             onClick={exportBookingsCSV}
             className="border-orange-300 text-orange-600 hover:bg-orange-50"
           >
-            {t("exportCSV", language as "ar" | "en" | "fr")}
+            {t("exportCSV", language)}
           </Button>
         </div>
       </div>
@@ -188,7 +188,6 @@ export default function Bookings() {
           clients={clients}
           onSave={handleSaveBooking}
           onCancel={handleCancelForm}
-          language={language}
           user={user}
         />
       )}
@@ -201,7 +200,7 @@ export default function Bookings() {
           onFiltersChange={(newFilters) =>
             setFilters((prev) => ({ ...prev, ...newFilters }))
           }
-          language={language as "ar" | "en" | "fr"}
+          language={language}
         />
       )}
 

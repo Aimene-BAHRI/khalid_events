@@ -10,7 +10,7 @@ export function useTranslation() {
     const userData = localStorage.getItem("user");
     if (userData) {
       const parsed = JSON.parse(userData);
-      setLanguage(parsed.language || "ar");
+      
     }
   }, []);
 

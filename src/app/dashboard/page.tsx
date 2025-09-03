@@ -11,13 +11,14 @@ import TodaySchedule from "@/components/dashboard/TodaySchedule";
 import UpcomingEvents from "@/components/dashboard/UpcomingEvents";
 import RecentPayments from "@/components/dashboard/RecentPayments";
 import { t } from "@/i18n/useTranslate";
+import { useLanguage } from "../context/languageContext";
 
 export default function Dashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [payments, setPayments] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
-  const [setUser] = useState<any>(null);
-  const [language, setLanguage] = useState("ar");
+  const [user, setUser] = useState<any>(null);
+  const { language } = useLanguage();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export default function Dashboard() {
       if (userData) {
         const parsed = JSON.parse(userData);
         setUser(parsed);
-        setLanguage(parsed.language || "ar");
+        console.log(user);
       }
 
       // fetch all dashboard data
